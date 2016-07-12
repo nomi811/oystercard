@@ -16,12 +16,12 @@ describe Oystercard do
     end
   end
 
-  describe "#deduct" do
-    it "deducts from balance" do
-      subject.top_up(10)
-      expect{ subject.deduct(3) }.to change{ subject.balance }.by -3
-    end
-  end
+  # describe "#deduct" do
+  #   it "deducts from balance" do
+  #     subject.top_up(10)
+  #     expect{ subject.deduct(3) }.to change{ subject.balance }.by -3
+  #   end
+  # end
 
   describe 'status of card' do
 
@@ -43,8 +43,14 @@ describe Oystercard do
   end
 
     it "checks balance on touch in" do
-      #subject.balance < Oystercard::MINIMUM_BALANCE
+      subject.balance < Oystercard::MINIMUM_FARE
       expect{ subject.touch_in }.to raise_error "insufficient funds"
+    end
+
+    it 'charge balance on touch out' do
+      subject.top_up(10)
+      subject.touch_in
+      expect{ subject.touch_out }.to change{ subject.balance }.by -Oystercard::MINIMUM_FARE
     end
 
 end
