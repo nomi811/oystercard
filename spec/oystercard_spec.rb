@@ -19,13 +19,6 @@ let(:station) { double :station }
       expect{ subject.top_up(Oystercard::MINIMUM_FARE) }.to raise_error "Maximum balance of #{maximum_balance} exceeded"
     end
   end
-1
-  # describe "#deduct" do
-  #   it "deducts from balance" do
-  #     subject.top_up(10)
-  #     expect{ subject.deduct(3) }.to change{ subject.balance }.by -3
-  #   end
-  # end
 
   describe 'status of card' do
 
@@ -60,7 +53,7 @@ let(:station) { double :station }
     it "remembers entry station" do
         subject.top_up(Oystercard::MINIMUM_FARE)
         subject.touch_in(station)
-        expect(subject.entry_station).to eq station 
+        expect(subject.entry_station).to eq station
     end
 
 end
