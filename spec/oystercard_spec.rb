@@ -3,6 +3,7 @@ require "oystercard"
 describe Oystercard do
   let(:entry_station) { double :station }
   let(:exit_station) {double :station}
+  let(:journey){ {entry_station: entry_station, exit_station: exit_station} }
 
   it {is_expected.to respond_to(:entry_station) }
 
@@ -58,6 +59,12 @@ describe Oystercard do
       subject.touch_out(exit_station)
       expect(subject.exit_station).to eq exit_station
     end
+
+    it 'stores a journey' do
+      subject.touch_out(exit_station)
+      expect(subject.journey_history).to include journey
+    end
+
   end
 
 end
