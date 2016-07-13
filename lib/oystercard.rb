@@ -14,7 +14,7 @@ class Oystercard
   end
 
   def touch_in(station)
-    raise "insufficient funds" if balance < MINIMUM_FARE
+    sufficient_balance_check?
     @entry_station = station
     @in_journey = true
   end
@@ -29,14 +29,6 @@ class Oystercard
     @in_journey
   end
 
-  def entry_station
-    @entry_station
-  end
-
-  def exit_station
-    @exit_station
-  end
-
   def journey_history
     @journey_history = {entry_station: entry_station, exit_station: exit_station}
   end
@@ -47,5 +39,7 @@ private
     @balance -= amount
   end
 
-
+  def sufficient_balance_check?
+    raise "insufficient funds" if balance < MINIMUM_FARE
+  end
 end
