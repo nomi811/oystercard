@@ -1,7 +1,8 @@
 require "oystercard"
 
 describe Oystercard do
-let(:station) { double :station }
+let(:entry_station) { double :station }
+let(:exit_station) {double :station}
 
   it {is_expected.to respond_to(:entry_station) }
 
@@ -28,32 +29,46 @@ let(:station) { double :station }
 
     it 'touch in' do
       subject.top_up(Oystercard::MINIMUM_FARE)
-      subject.touch_in(station)
+      subject.touch_in(entry_station)
       expect(subject).to be_in_journey
     end
     it 'touch out' do
       subject.top_up(Oystercard::MINIMUM_FARE)
-      subject.touch_in(station)
-      subject.touch_out
+      subject.touch_in(entry_station)
+      subject.touch_out(exit_station)
       expect(subject).not_to be_in_journey
     end
   end
 
     it "checks balance on touch in" do
       subject.balance < Oystercard::MINIMUM_FARE
-      expect{ subject.touch_in(station) }.to raise_error "insufficient funds"
+      expect{ subject.touch_in(entry_station) }.to raise_error "insufficient funds"
     end
 
     it 'charge balance on touch out' do
       subject.top_up(Oystercard::MINIMUM_FARE)
-      subject.touch_in(station)
-      expect{ subject.touch_out }.to change{ subject.balance }.by -Oystercard::MINIMUM_FARE
+      subject.touch_in(entry_station)
+      expect{ subject.touch_out(exit_station) }.to change{ subject.balance }.by -Oystercard::MINIMUM_FARE
     end
 
-    it "remembers entry station" do
-        subject.top_up(Oystercard::MINIMUM_FARE)
-        subject.touch_in(station)
-        expect(subject.entry_station).to eq station
+    describe 'journey events' do
+      it "remembers entry station" do
+          subject.top_up(Oystercard::MINIMUM_FARE)
+          subject.touch_in(entry_station)
+          expect(subject.entry_station).to eq entry_station
+      end
     end
+
+    #
+      it 'remembers exit station' do
+        subject.top_up(Oystercard::MINIMUM_FARE)
+        subject.touch_in(entry_station)
+        subject.touch_out(exit_station)
+        expect(subject.exit_station).to eq exit_station
+      end
+      it {is_expected.to respond_to(:touch_out).with(1).argument }
+      it {is_expected.to respond_to(:exit_station) }
+    #end
+
 
 end
