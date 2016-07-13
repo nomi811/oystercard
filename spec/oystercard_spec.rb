@@ -50,7 +50,7 @@ describe Oystercard do
     it 'charge balance on touch out' do
       expect{ subject.touch_out(exit_station) }.to change{ subject.balance }.by -Oystercard::MINIMUM_FARE
     end
-    
+
     it "remembers entry station" do
         expect(subject.entry_station).to eq entry_station
     end
@@ -62,7 +62,7 @@ describe Oystercard do
 
     it 'stores a journey' do
       subject.touch_out(exit_station)
-      expect(subject.journey_history).to include journey
+      expect(subject.journey).to include journey
     end
   end
 

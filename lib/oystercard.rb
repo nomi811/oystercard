@@ -1,11 +1,12 @@
 class Oystercard
   MAXIMUM_BALANCE = 90
   MINIMUM_FARE = 1
-  attr_reader :balance, :entry_station, :journey_history, :exit_station, :in_journey
+  attr_accessor :balance, :entry_station, :journey_history_array, :exit_station, :in_journey, :journey
 
   def initialize
     @balance = 0
     @in_journey = false
+    @journey_history_array = []
   end
 
   def top_up(amount)
@@ -23,15 +24,22 @@ class Oystercard
     deduct(MINIMUM_FARE)
     @exit_station = station
     @in_journey = false
+    #@journey_history << journey
+    journey_history
   end
 
   def in_journey?
     @in_journey
   end
 
-  def journey_history
-    @journey_history = {entry_station: entry_station, exit_station: exit_station}
+  def journey
+    @journey = {entry_station: entry_station, exit_station: exit_station}
   end
+
+  def journey_history
+    @journey_history_array << journey
+  end
+
 
 private
 
