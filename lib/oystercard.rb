@@ -36,7 +36,7 @@ class Oystercard
   end
 
   def journey_history
-    @journey_history = []
+    @journey_history
   end
 
 private
