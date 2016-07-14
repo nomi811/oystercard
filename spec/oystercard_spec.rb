@@ -53,31 +53,46 @@ let(:exit_station) { double :exit_station }
     end
   end
 
+  it "should deduct minimum fare when touching out" do
+    subject.top_up(min_balance)
+    subject.touch_in(entry_station)
+    expect{ subject.touch_out(exit_station) }.to change{ subject.balance }.by(-min_balance)
+  end
+
   context "#touch_out" do
 
     before :each do
       subject.top_up(min_balance)
       subject.touch_in(entry_station)
+      subject.touch_out(exit_station)
     end
 
     it "should allow a user to touch_out" do
-      subject.touch_out(exit_station)
       expect(subject).to_not be_in_journey
     end
 
-    it "should deduct minimum fare when touching out" do
-      expect{ subject.touch_out(exit_station) }.to change{ subject.balance }.by(-min_balance)
-    end
-
     it "should forget entry_station station on touch_out" do
-      subject.touch_out(exit_station)
       expect(subject.entry_station).to be_nil
     end
 
     it "should record exit_station" do
-      expect(subject).to respond_to(:touch_out).with(1).argument
-      subject.touch_out(exit_station)
       expect(subject.exit_station).to eq exit_station
+    end
+  end
+
+  context "#journeys" do
+
+    let(:journey){ {entry_station: entry_station, exit_station: exit_station } }
+
+    it "should return an empty journeys array" do
+      expect(subject.journeys.length).to eq 0
+    end
+
+    it "should create a hash of a completed journey" do
+      subject.top_up(min_balance)
+      subject.touch_in(entry_station)
+      subject.touch_out(exit_station)
+      expect(subject.journeys).to include journey
     end
   end
 end
