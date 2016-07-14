@@ -5,6 +5,7 @@ min_balance = Oystercard::MIN_BALANCE
 
 describe Oystercard do
 let(:entry_station) { double :entry_station }
+let(:exit_station) { double :exit_station }
 
   context "#balance" do
     it 'new oystercard has a balance of 0' do
@@ -42,7 +43,7 @@ let(:entry_station) { double :entry_station }
     end
 
     it "should prevent travelling when balance is below £1" do
-      subject.touch_out
+      subject.touch_out(exit_station)
       expect{ subject.touch_in(entry_station) }.to raise_error "you need at least £1 to travel"
     end
 
@@ -60,18 +61,23 @@ let(:entry_station) { double :entry_station }
     end
 
     it "should allow a user to touch_out" do
-      subject.touch_out
+      subject.touch_out(exit_station)
       expect(subject).to_not be_in_journey
     end
 
     it "should deduct minimum fare when touching out" do
-      expect{ subject.touch_out }.to change{ subject.balance }.by(-min_balance)
+      expect{ subject.touch_out(exit_station) }.to change{ subject.balance }.by(-min_balance)
     end
 
     it "should forget entry_station station on touch_out" do
-      #expect{subject.touch_out}.to change(entry_station).to nil
-      subject.touch_out
+      subject.touch_out(exit_station)
       expect(subject.entry_station).to be_nil
+    end
+
+    it "should record exit_station" do
+      expect(subject).to respond_to(:touch_out).with(1).argument
+      subject.touch_out(exit_station)
+      expect(subject.exit_station).to eq exit_station
     end
   end
 end

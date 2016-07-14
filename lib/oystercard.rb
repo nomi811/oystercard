@@ -4,7 +4,7 @@ class Oystercard
   MIN_BALANCE = 1
   MIN_CHARGE = 1
 
-  attr_reader :entry_station, :balance
+  attr_reader :entry_station, :balance, :exit_station
 
   def initialize
     @balance = 0
@@ -25,9 +25,10 @@ class Oystercard
     @entry_station = station
   end
 
-  def touch_out
+  def touch_out(station)
     deduct(MIN_CHARGE)
     @entry_station = nil
+    @exit_station = station
   end
 
   private
