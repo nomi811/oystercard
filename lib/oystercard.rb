@@ -8,7 +8,7 @@ class Oystercard
 
   def initialize
     @balance = 0
-
+    @journey = nil
     @journey_history_array = []
   end
 
@@ -18,15 +18,14 @@ class Oystercard
   end
 
   def touch_in(entry_station)
-
     sufficient_balance_check?
-    self.journey = Journey.new(entry_station)
+    deduct(PENALTY_FARE) && end_and_store if @journey
+    create_new_journey
   end
 
   def touch_out(exit_station)
-    deduct(MINIMUM_FARE)
-    self.journey.journey_end(exit_station)
-    journey.journey_history
+    !@journey ? (deduct(PENALTY_FARE) && create_new_journey) : deduct(MINIMUM_FARE)
+    end_and_store
   end
 
 
@@ -34,6 +33,15 @@ private
 
   def deduct(amount)
     @balance -= amount
+  end
+
+  def create_new_journey
+    @journey = Journey.new(entry_station)
+  end
+
+  def end_and_store
+    self.journey.end_journey(nil)
+    self.journey.journey_history
   end
 
   def sufficient_balance_check?

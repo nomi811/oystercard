@@ -33,8 +33,11 @@ describe Oystercard do
     it "charges a penalty fare if card was not touched out" do
       subject.top_up(8)
       subject.touch_in(entry_station)
-      expect{ subject.touch_out(exit_station) }.to change{ subject.balance }.by -Oystercard::PENALTY_FARE
+      expect{ subject.touch_in(entry_station) }.to change{ subject.balance }.by -Oystercard::PENALTY_FARE
     end
+  end
+  it 'charges penalty fare if card was not touched in' do
+    expect{subject.touch_out(exit_station)}.to change{subject.balance}.by -Oystercard::PENALTY_FARE
   end
   context 'card activity' do
     before(:each) do
@@ -42,29 +45,14 @@ describe Oystercard do
       subject.touch_in(entry_station)
     end
 
-    # it 'touch in' do
-    #   allow(journey_touch).to receive(:in_journey?).and_return true
-    #   expect(subject).to be_in_journey
-    # end
-    # it 'touch out' do
-    #   allow(journey_touch).to receive(:in_journey?).and_return false
-    #   subject.touch_out(exit_station)
-    #   expect(subject).not_to be_in_journey
-    # end
-    it 'charge balance on touch out' do
-      expect{ subject.touch_out(exit_station) }.to change{ subject.balance }.by -Oystercard::MINIMUM_FARE
+    describe '#touch_out' do
+      it 'charge balance on touch out' do
+        expect{ subject.touch_out(exit_station) }.to change{ subject.balance }.by -Oystercard::MINIMUM_FARE
+      end
     end
 
-    it "remembers entry station" do
-        expect(subject.entry_station).to eq entry_station
-    end
 
-    it 'remembers exit station' do
-      subject.touch_out(exit_station)
-      expect(subject.exit_station).to eq exit_station
-    end
-
-    # it 'stores a journey' do
+      # it 'stores a journey' do
     #   subject.touch_out(exit_station)
     #   expect(subject.journey).to include journey
     # end
