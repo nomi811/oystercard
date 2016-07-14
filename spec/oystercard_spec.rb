@@ -24,11 +24,16 @@ describe Oystercard do
     end
   end
 
-  describe 'status of card' do
+  describe '#touch_in' do
 
-    it "checks balance on touch in" do
+    it "raises an error when balance is insufficient" do
       subject.balance < Oystercard::MINIMUM_FARE
       expect{ subject.touch_in(entry_station) }.to raise_error "insufficient funds"
+    end
+    it "charges a penalty fare if card was not touched out" do
+      subject.top_up(8)
+      subject.touch_in(entry_station)
+      expect{ subject.touch_out(exit_station) }.to change{ subject.balance }.by -Oystercard::PENALTY_FARE
     end
   end
   context 'card activity' do

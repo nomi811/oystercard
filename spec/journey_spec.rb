@@ -5,8 +5,10 @@ describe Journey do
 #   expect(subject).not_to be_in_journey
 # end
 
+  subject{described_class.new('jeorge')}
   it 'stores a journey' do
-    subject.journey_end(entry_station, exit_station)
-    expect(subject.journey_end).to include @journey
+    expect(subject.journey).to eq 'jeorge'
   end
+
+
 end
