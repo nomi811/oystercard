@@ -57,5 +57,4 @@ describe Oystercard do
     #   expect(subject.journey).to include journey
     # end
   end
-
 end

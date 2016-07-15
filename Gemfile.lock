@@ -1,6 +1,7 @@
 GEM
   remote: https://rubygems.org/
   specs:
+<<<<<<< HEAD
     coderay (1.1.1)
     diff-lcs (1.2.5)
     method_source (0.8.2)
@@ -8,6 +9,9 @@ GEM
       coderay (~> 1.1.0)
       method_source (~> 0.8.1)
       slop (~> 3.4)
+=======
+    diff-lcs (1.2.5)
+>>>>>>> 9aedc32423b901f1ee30131a31fc5d9ce1dde55c
     rspec (3.5.0)
       rspec-core (~> 3.5.0)
       rspec-expectations (~> 3.5.0)
@@ -21,13 +25,19 @@ GEM
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.5.0)
     rspec-support (3.5.0)
+<<<<<<< HEAD
     slop (3.6.0)
+=======
+>>>>>>> 9aedc32423b901f1ee30131a31fc5d9ce1dde55c
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
+<<<<<<< HEAD
   pry
+=======
+>>>>>>> 9aedc32423b901f1ee30131a31fc5d9ce1dde55c
   rspec
 
 RUBY VERSION
